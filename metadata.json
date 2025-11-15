@@ -1,6 +1,6 @@
 {
-  "name": "AI Career Path Coach",
-  "description": "An interactive AI career coach that uses real-time voice conversation to help users explore career paths, identify strengths, and create actionable steps for their professional journey.",
+  "name": "careerpath.ai",
+  "description": "An interactive careerpath.ai coach that uses real-time voice conversation to help users explore career paths, identify strengths, and create actionable steps for their professional journey.",
   "requestFramePermissions": [
     "microphone"
   ]

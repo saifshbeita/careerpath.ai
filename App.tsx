@@ -429,7 +429,7 @@ OUTPUT STRUCTURE (use clear and professional markdown formatting, DO NOT use emo
         setStatus(AppStatus.CONNECTING);
         try {
             outputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: GEMINI_SAMPLE_rate });
-            const welcomeMessage = "Hello! I'm your AI Career Coach. To get started, what's your name?";
+            const welcomeMessage = "Hello! I'm your careerpath.ai coach. To get started, what's your name?";
 
             const ttsResponse = await ai.models.generateContent({
                 model: "gemini-2.5-flash-preview-tts",
@@ -587,7 +587,7 @@ DO NOT:
             <header className="p-4 flex items-center justify-between border-b border-slate-200/80">
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-slate-800 rounded-lg shadow-sm"></div>
-                    <h1 className="text-lg font-bold text-slate-800">AI Career Coach</h1>
+                    <h1 className="text-lg font-bold text-slate-800">careerpath.ai</h1>
                 </div>
                  <div className="w-8 h-8 bg-slate-200 rounded-full"></div>
             </header>
@@ -595,7 +595,7 @@ DO NOT:
                 <h1 className="text-3xl md:text-4xl font-bold text-slate-800">Discover Your Perfect Career Path</h1>
                 <p className="text-slate-600 mt-3 text-lg max-w-2xl">I'm here to help you discover a fulfilling career through a friendly, voice-based conversation.</p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-12 text-left">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl mt-16 text-left">
                     <div className="bg-white/50 p-6 rounded-xl shadow-sm border border-slate-200/80">
                         <ChatIcon />
                         <h3 className="font-semibold text-slate-800 mb-1">1. Voice Interview</h3>
@@ -613,7 +613,7 @@ DO NOT:
                     </div>
                 </div>
 
-                <div className="w-full mt-12 max-w-sm">
+                <div className="w-full mt-16 max-w-sm">
                     <button 
                         onClick={startConversation}
                         className="w-full bg-slate-800 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-700 transition-colors shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-500/50"
@@ -696,7 +696,7 @@ DO NOT:
                 <div className="flex justify-between items-center mb-8 flex-shrink-0">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 bg-slate-800 rounded-lg shadow-sm"></div>
-                        <h2 className="text-lg font-bold text-slate-800">AI Career Coach</h2>
+                        <h2 className="text-lg font-bold text-slate-800">careerpath.ai</h2>
                     </div>
                     <div className="w-8 h-8 bg-slate-200 rounded-full"></div>
                 </div>
@@ -739,7 +739,7 @@ DO NOT:
     )
     
     return (
-        <div className="flex flex-col h-full max-h-[95vh] h-[800px] w-full max-w-6xl bg-white/70 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden">
+        <div className="flex flex-col h-full w-full bg-white/70 backdrop-blur-xl overflow-hidden rounded-2xl border border-slate-200/60">
            {mode === 'WELCOME' ? renderWelcomeMode() : renderInterviewAnalysisLayout()}
         </div>
     );
