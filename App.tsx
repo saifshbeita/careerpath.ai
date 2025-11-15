@@ -71,6 +71,55 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
     return <div className="text-slate-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: htmlContent }} />;
 };
 
+const CareerPathGraph = ({ paths }: { paths: { primary: string | null; alternatives: string[] } }) => {
+    if (!paths.primary) return null;
+
+    return (
+        <div className="mt-12 p-6 bg-slate-50/70 rounded-xl border border-slate-200/80">
+            <h2 className="text-2xl font-semibold text-slate-700 mb-8 text-center">Your Career Constellation</h2>
+            <div className="flex flex-col items-center text-center">
+                {/* User Profile Node */}
+                <div className="px-6 py-3 bg-white rounded-lg shadow-md border border-slate-200">
+                    <p className="font-bold text-slate-800 text-lg">Your Profile</p>
+                </div>
+
+                {/* Connector */}
+                <div className="w-1 h-8 bg-slate-300 my-2 rounded-full"></div>
+
+                {/* Primary Path Node */}
+                <div className="px-6 py-4 bg-indigo-600 text-white rounded-lg shadow-lg">
+                    <p className="text-xs font-semibold uppercase tracking-wider opacity-80">Primary Path</p>
+                    <p className="font-bold text-xl mt-1">{paths.primary}</p>
+                </div>
+
+                {/* Alternatives Section */}
+                {paths.alternatives.length > 0 && (
+                    <>
+                        {/* Connector */}
+                        <div className="w-1 h-8 bg-slate-300 my-2 rounded-full"></div>
+                        {/* T-junction */}
+                        <div className="w-1/2 h-1 bg-slate-300 rounded-full"></div>
+                        
+                        <div className="flex justify-center w-full gap-4 mt-2">
+                            {paths.alternatives.map((alt, index) => (
+                                <div key={index} className="flex flex-col items-center flex-1 min-w-0">
+                                    {/* Vertical Connector */}
+                                    <div className="w-1 h-8 bg-slate-300 rounded-full"></div>
+                                    {/* Alternative Node */}
+                                    <div className="px-4 py-3 bg-white rounded-lg shadow-md border border-slate-200 w-full">
+                                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Alternative</p>
+                                        <p className="font-semibold text-slate-700 mt-1 truncate">{alt}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+};
+
 
 const App: React.FC = () => {
     const [status, setStatus] = useState<AppStatus>(AppStatus.IDLE);
@@ -81,6 +130,7 @@ const App: React.FC = () => {
     const [analysisResult, setAnalysisResult] = useState('');
     const [userProfileSummary, setUserProfileSummary] = useState('');
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [careerPaths, setCareerPaths] = useState<{primary: string | null, alternatives: string[]}>({ primary: null, alternatives: [] });
     const transcriptEndRef = useRef<HTMLDivElement>(null);
 
     const sessionPromiseRef = useRef<Promise<LiveSession> | null>(null);
@@ -162,14 +212,14 @@ EXAMPLE OUTPUT FORMAT:
 ---
 
 FULL REPORT SPECIFICATION:
-You are a professional career analyst. Your task is to analyze the provided conversation transcript and generate a comprehensive, actionable, and formal career roadmap.
+You are a professional career analyst. Your task is to analyze the provided conversation transcript and generate a comprehensive, actionable, and formal career roadmap. The beginning of the transcript may contain the user's name, age, and location. Use this context to personalize the analysis.
 
 OUTPUT STRUCTURE (use clear and professional markdown formatting, DO NOT use emojis):
 
 # Career Path Analysis
 
 ## Profile Summary
-[Provide a 3-4 sentence summary of the user's core personality traits, expressed interests, and apparent natural abilities based on the conversation. The tone should be objective and insightful.]
+[Provide a 3-4 sentence summary of the user's core personality traits, expressed interests, and apparent natural abilities based on the conversation. If the user provided their name, use it. The tone should be objective and insightful.]
 
 ## Recommended Career Path
 **Primary Career Direction:** [Specific career title]
@@ -255,7 +305,26 @@ OUTPUT STRUCTURE (use clear and professional markdown formatting, DO NOT use emo
             const parts = fullResponseText.split('---SIDEBAR---');
             const summary = parts[0]?.trim() || '';
             const report = parts[1]?.trim() || "Sorry, I encountered an error while generating your career path analysis. The format of the response was not as expected. Please try again by starting over.";
+            
+            let primaryPath: string | null = null;
+            const primaryMatch = report.match(/\*\*Primary Career Direction:\*\*\s*(.*)/);
+            if (primaryMatch && primaryMatch[1]) {
+                primaryPath = primaryMatch[1].trim();
+            }
 
+            const alternatives: string[] = [];
+            const alternativesSectionMatch = report.match(/\*\*Alternative Paths for Consideration:\*\*\s*([\s\S]*?)(?=\n##|#|$)/);
+            if (alternativesSectionMatch && alternativesSectionMatch[1]) {
+                const section = alternativesSectionMatch[1];
+                const alternativeMatches = section.matchAll(/^\s*\d\.\s*([^-]+)/gm);
+                for (const match of alternativeMatches) {
+                    if (match[1]) {
+                        alternatives.push(match[1].trim());
+                    }
+                }
+            }
+            
+            setCareerPaths({ primary: primaryPath, alternatives });
             setUserProfileSummary(summary);
             setAnalysisResult(report);
 
@@ -360,7 +429,7 @@ OUTPUT STRUCTURE (use clear and professional markdown formatting, DO NOT use emo
         setStatus(AppStatus.CONNECTING);
         try {
             outputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: GEMINI_SAMPLE_rate });
-            const welcomeMessage = "Hello! I'm your AI Career Coach. To get started, could you tell me what activities make you lose track of time?";
+            const welcomeMessage = "Hello! I'm your AI Career Coach. To get started, what's your name?";
 
             const ttsResponse = await ai.models.generateContent({
                 model: "gemini-2.5-flash-preview-tts",
@@ -423,7 +492,18 @@ YOUR INTERVIEW GOAL:
 Your goal is to understand the user's core identity—their passions, natural talents, and what truly motivates them—through a short, insightful conversation. You are not just a question-asker; you are a conversation partner.
 
 INTERVIEW PROCESS:
-The interview has started. You've already asked your first question: "what activities make you lose track of time?". Your task is to listen carefully to their response and let your curiosity guide the conversation.
+Your first goal is to gather some basic information in a friendly, conversational way. The interview will proceed in two phases.
+
+**Phase 1: Introduction (Your current phase)**
+You have already introduced yourself and asked for the user's name. Your immediate task is to:
+1.  Listen for the user's name.
+2.  Once they provide their name, greet them personally (e.g., "Nice to meet you, [Name]!").
+3.  Then, ask for their age (e.g., "And how old are you?").
+4.  After they respond, ask where they are from (e.g., "And where are you from?").
+5.  Once you have this information, smoothly transition to the main interview. A good transition would be: "Great, thanks for sharing that. Now, let's dive in. To get started, could you tell me what activities make you lose track of time?"
+
+**Phase 2: Core Interview**
+After you've asked the "lose track of time" question, your goal is to understand the user's core identity—their passions, natural talents, and what truly motivates them—through a short, insightful conversation. You are not just a question-asker; you are a conversation partner.
 
 Instead of following a rigid script, you will dynamically create questions based on what the user tells you. Use the following themes as a mental guide, but do not simply ask these example questions. Weave them into the conversation naturally if they fit.
 
@@ -489,6 +569,7 @@ DO NOT:
         setMode('WELCOME');
         setAnalysisResult('');
         setUserProfileSummary('');
+        setCareerPaths({ primary: null, alternatives: [] });
         setIsAnalyzing(false);
         setStatus(AppStatus.IDLE);
     }
@@ -600,7 +681,10 @@ DO NOT:
                     <p className="text-sm">This may take a moment.</p>
                 </div>
             ) : (
-                <MarkdownRenderer content={analysisResult} />
+                <>
+                    <MarkdownRenderer content={analysisResult} />
+                    <CareerPathGraph paths={careerPaths} />
+                </>
             )}
         </div>
     );
