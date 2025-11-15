@@ -1,29 +1,81 @@
-Careerpath.ai
-An AI-powered career guidance platform using dual AI models for voice-based interviews and personalized career analysis.
-Overview
-AI Career Coach conducts voice-driven career interviews and generates comprehensive career reports including recommended paths, skills roadmaps, and learning plans. Built with React and powered by Google Gemini AI.
-Features
+<div align="center">
+  <h1>Careerpath.ai</h1>
+  <h3>An AI-powered career guidance platform using dual AI models for voice-based interviews and personalized career analysis.</h3>
 
-Voice-driven conversation with real-time transcription
-Interactive audio visualization
-Dual AI system: conversational interviewing + career analysis
-Visual career constellation showing primary and alternative paths
-Personalized 12-month learning roadmap
-Responsive, minimal UI design
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/Google-GeminiAI-blue?logo=google" />
+</div>
 
-Tech Stack
+---
 
-TypeScript + React.js
-Tailwind CSS
-Google Gemini Pro Vision (conversational AI)
-Google Gemini Pro (analytical AI)
-Web Speech API / Google Speech-to-Text
-Google Cloud Text-to-Speech
-Web Audio API
-View your app in AI Studio: https://ai.studio/apps/drive/1Kpkp8jfnA-LbMFMd1pYEfD3a9QhNn99S
+## Overview
 
-Usage
-Click "Start Conversation"
-Allow microphone access
-Answer AI questions via voice
-Receive personalized career analysis after 8-12 questions
+Careerpath.ai is an intelligent career coaching platform that simulates a real-life voice interview using two synchronized AI models:
+
+- AI Career Coach — conducts a natural, voice-driven interview  
+- Career Analyst AI — generates a personalized career pathway, skill map, and learning roadmap
+
+Built with React, powered by Google Gemini AI, and designed for real-time, interactive conversations.
+
+---
+
+## Features
+
+- Voice-driven conversation with real-time transcription  
+- Interactive audio visualization  
+- Dual AI system  
+  - Model 1: Conversational interviewing (voice input + voice output)  
+  - Model 2: Deep analytical career breakdown  
+- Career constellation visualization showing primary and alternative paths  
+- Personalized 12-month learning roadmap  
+- Responsive, minimal UI built with Tailwind  
+- Real-time Web Audio API integration  
+
+---
+
+## Tech Stack
+
+### Frontend
+- TypeScript  
+- React.js  
+- Tailwind CSS  
+
+### AI / Backend
+- Google Gemini Pro Vision (conversational AI)  
+- Google Gemini Pro (analytical AI)
+
+### Browser APIs
+- Web Speech API / Google Speech-to-Text  
+- Google Cloud Text-to-Speech  
+- Web Audio API  
+
+---
+
+## Usage
+
+1. Click “Start Conversation”  
+2. Allow microphone access  
+3. Speak naturally while the AI coach guides the interview  
+4. After 8–12 questions, the platform provides:  
+   - Career fit analysis  
+   - Recommended paths  
+   - Skill gap assessment  
+   - A personalized 12-month learning roadmap  
+
+---
+
+## Live App (AI Studio)
+
+<div align="center">
+  
+**Launch in Google AI Studio:**  
+https://ai.studio/apps/drive/1Kpkp8jfnA-LbMFMd1pYEfD3a9QhNn99S
+
+</div>
+
+---
+
+## Suggested Project Structure
+
