@@ -1,20 +1,29 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+Careerpath.ai
+An AI-powered career guidance platform using dual AI models for voice-based interviews and personalized career analysis.
+Overview
+AI Career Coach conducts voice-driven career interviews and generates comprehensive career reports including recommended paths, skills roadmaps, and learning plans. Built with React and powered by Google Gemini AI.
+Features
 
-# Run and deploy your AI Studio app
+Voice-driven conversation with real-time transcription
+Interactive audio visualization
+Dual AI system: conversational interviewing + career analysis
+Visual career constellation showing primary and alternative paths
+Personalized 12-month learning roadmap
+Responsive, minimal UI design
 
-This contains everything you need to run your app locally.
+Tech Stack
 
+TypeScript + React.js
+Tailwind CSS
+Google Gemini Pro Vision (conversational AI)
+Google Gemini Pro (analytical AI)
+Web Speech API / Google Speech-to-Text
+Google Cloud Text-to-Speech
+Web Audio API
 View your app in AI Studio: https://ai.studio/apps/drive/1Kpkp8jfnA-LbMFMd1pYEfD3a9QhNn99S
 
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Usage
+Click "Start Conversation"
+Allow microphone access
+Answer AI questions via voice
+Receive personalized career analysis after 8-12 questions
