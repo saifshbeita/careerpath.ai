@@ -75,7 +75,5 @@ https://ai.studio/apps/drive/1Kpkp8jfnA-LbMFMd1pYEfD3a9QhNn99S
 
 </div>
 
----
 
-## Suggested Project Structure
 
