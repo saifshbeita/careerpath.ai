@@ -66,12 +66,7 @@ Built with React, powered by Google Gemini AI, and designed for real-time, inter
 
 ---
 
-## Live App (AI Studio)
 
-<div align="center">
-  
-**Launch in Google AI Studio:**  
-https://ai.studio/apps/drive/1Kpkp8jfnA-LbMFMd1pYEfD3a9QhNn99S
 
 </div>
 
