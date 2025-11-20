@@ -14,8 +14,8 @@
 
 Careerpath.ai is an intelligent career coaching platform that simulates a real-life voice interview using two synchronized AI models:
 
-- AI Career Coach — conducts a natural, voice-driven interview  
-- Career Analyst AI — generates a personalized career pathway, skill map, and learning roadmap
+- AI Career Coach - conducts a natural, voice-driven interview  
+- Career Analyst AI - generates a personalized career pathway, skill map, and learning roadmap
 
 Built with React, powered by Google Gemini AI, and designed for real-time, interactive conversations.
 
