@@ -1,10 +1,10 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-// FIX: Removed LiveSession from import as it is not an exported member.
+
 import { GoogleGenAI, LiveServerMessage, Modality, Blob } from '@google/genai';
 import { AppStatus, TranscriptEntry } from './types';
 import { encode, decode, decodeAudioData } from './utils/audioUtils';
 
-// FIX: Define LiveSession interface locally as it's not exported from @google/genai
+
 interface LiveSession {
   close: () => void;
   sendRealtimeInput: (input: { media: Blob }) => void;
