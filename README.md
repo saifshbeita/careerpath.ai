@@ -1,72 +1,96 @@
 <div align="center">
 
-# Careerpath.ai
+# careerpath.ai
 
-### Next-generation career navigation powered by dual-model artificial intelligence
+### An AI career coach that interviews you by voice and builds your personalized career roadmap
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-38B2AC?logo=tailwindcss&logoColor=white)
-![Gemini](https://img.shields.io/badge/Google-GeminiAI-blue?logo=google)
+![Gemini](https://img.shields.io/badge/Google-Gemini-blue?logo=google)
 
 </div>
 
 ---
 
-## Executive Summary
+## What it does
 
-Careerpath.ai represents a paradigm shift in professional development. By leveraging a sophisticated dual-model architecture, the platform facilitates immersive voice-based interviews that go beyond surface-level assessment. It bridges the gap between raw ambition and actionable career trajectory through real-time interaction and deep analytical insights.
+careerpath.ai holds a natural, spoken interview with you — no forms, no quizzes. A warm AI coach asks 5–7 adaptive questions about what energizes you, what you're naturally good at, and what you value. When the interview ends, a second model analyzes the full transcript and produces a structured report:
 
----
+- A **profile summary** of your traits and strengths
+- A **primary career direction** with rationale, plus alternatives
+- Recommended **university majors**
+- A **skills development plan** (technical + soft skills, each with a concrete starting point)
+- A phased **6–12 month learning roadmap** with checklists
+- **Starter projects** and **action items for this week**
 
-## Core Capabilities
+A visual "career constellation" maps your profile to the primary and alternative paths.
 
-*   **Synchronized Dual AI Engine**: Employs a specialized conversational model for natural dialogue alongside a secondary analytical model for complex career mapping.
+## How it works
 
-*   **Voice-First Interface**: Utilizes advanced Web Speech and Web Audio APIs to provide a seamless, hands-free coaching experience.
+The app uses three Gemini models, each for the job it's best at:
 
-*   **Advanced Analytics**: Translates interview data into high-fidelity career pathways and comprehensive skill gap assessments.
+| Stage | Model | Role |
+|---|---|---|
+| Greeting | `gemini-2.5-flash-preview-tts` | Synthesizes the spoken welcome message |
+| Interview | `gemini-2.5-flash-native-audio` (Live API) | Realtime bidirectional voice conversation with live transcription |
+| Analysis | `gemini-2.5-pro` | Deep reasoning over the transcript to generate the career report |
 
-*   **Predictive Roadmapping**: Generates structured 12-month development plans tailored to individual aptitude and industry demand.
+Microphone audio is captured with the Web Audio API, converted to 16-bit PCM, and streamed to the Gemini Live API over a websocket session. The model's audio replies stream back as PCM chunks that are scheduled gaplessly for playback, with barge-in support — start talking and the coach stops mid-sentence.
 
-*   **Visual Intelligence**: Displays dynamic career constellations to illustrate primary and alternative professional growth opportunities.
+## Getting started
 
-*   **Modern Technical Foundation**: Engineered with a high-performance stack focusing on responsiveness, scalability, and seamless user interaction.
+**Prerequisites:** Node.js 20+, a browser with microphone access, and a [Gemini API key](https://aistudio.google.com/apikey).
 
----
+```bash
+git clone https://github.com/saifshbeita/careerpath.ai.git
+cd careerpath.ai
+npm install
+cp .env.example .env   # then paste your GEMINI_API_KEY into .env
+npm run dev            # http://localhost:3000
+```
 
-## Technical Architecture
+Other scripts:
 
-### Frontend Infrastructure
+```bash
+npm run build       # typecheck + production build
+npm run preview     # serve the production build locally
+npm run typecheck   # strict TypeScript check only
+```
 
-*   **TypeScript**: Ensures type safety and robust code architecture.
+> **Note:** This is a client-side demo, so the API key is embedded in the browser bundle. Use a restricted key, and put the calls behind a small backend proxy before deploying publicly.
 
-*   **React**: Powers a fluid and modular user interface.
+## Project structure
 
-*   **Tailwind CSS**: Enables a clean, professional, and responsive design system.
+```
+src/
+├── App.tsx                  # Composition layer: mode switching + analysis flow
+├── main.tsx                 # Entry point
+├── components/              # Presentational components
+│   ├── WelcomeScreen.tsx
+│   ├── InterviewPanel.tsx   # Live chat transcript + mic control
+│   ├── AnalysisPanel.tsx    # Report rendering
+│   ├── Sidebar.tsx
+│   ├── CareerPathGraph.tsx  # Career constellation visualization
+│   ├── MarkdownRenderer.tsx
+│   └── icons.tsx
+├── hooks/
+│   └── useVoiceSession.ts   # Mic capture, live session, audio playback, transcript
+├── services/
+│   ├── geminiClient.ts      # Shared client singleton
+│   ├── speech.ts            # Text-to-speech
+│   └── analysis.ts          # Career report generation
+├── utils/
+│   ├── audio.ts             # PCM encoding/decoding
+│   └── reportParser.ts      # Structured extraction from the report
+└── constants/               # Prompts, model ids, audio config
+```
 
-### Intelligence and Backend
+## Tech stack
 
-*   **Google Gemini Pro**: Executes sophisticated career logic and deep data synthesis.
-
-*   **Google Gemini Pro Vision**: Drives context-aware, human-like conversational flows.
-
-### Integrated Browser Technologies
-
-*   **Speech Processing**: Real-time transcription and synthesis via Google Cloud and Web Speech APIs.
-
-*   **Audio Processing**: High-fidelity signal handling powered by the Web Audio API.
-
----
-
-## Platform Workflow
-
-1.  **Initiation**: Users trigger the interactive session via the dashboard.
-
-2.  **Engagement**: The AI Career Coach conducts a multi-stage, adaptive interview process.
-
-3.  **Synthesis**: Upon completion, the system processes responses to identify career alignment.
-
-4.  **Delivery**: The platform generates a comprehensive report containing skill gap analysis, recommended industry paths, and a customized 12-month roadmap for professional advancement.
-
-
+- **React 19 + TypeScript (strict)** — UI and type safety
+- **Vite 6** — dev server and bundling
+- **Tailwind CSS 4** — styling via the first-party Vite plugin
+- **@google/genai** — Gemini Live API, TTS, and text generation
+- **Web Audio API** — realtime PCM capture and gapless playback
