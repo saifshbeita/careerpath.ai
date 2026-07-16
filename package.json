@@ -1,20 +1,23 @@
 {
   "name": "careerpath.ai",
-  "private": true,
   "version": "1.0.0",
   "description": "AI career coach that interviews you by voice and generates a personalized career roadmap",
+  "private": true,
   "type": "module",
+  
   "scripts": {
-    "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "dev": "vite",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
+
   "dependencies": {
     "@google/genai": "^1.29.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
+
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.0",
     "@types/node": "^22.14.0",
