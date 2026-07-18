@@ -30,6 +30,15 @@ interface LiveSession {
   sendRealtimeInput: (input: { media: GenAiBlob }) => void;
 }
 
+// The completion phrase must match against live speech-to-text output,
+// which isn't guaranteed to preserve exact casing or trailing punctuation.
+const NORMALIZED_COMPLETE_PHRASE = INTERVIEW_COMPLETE_PHRASE.replace(/[.!?]+$/, '').toLowerCase();
+
+/** Whether the coach's spoken turn signaled the interview is complete. */
+function isInterviewComplete(aiText: string): boolean {
+  return aiText.toLowerCase().includes(NORMALIZED_COMPLETE_PHRASE);
+}
+
 interface UseVoiceSessionOptions {
   /**
    * Invoked once the coach signals the interview is complete.
@@ -173,7 +182,7 @@ export function useVoiceSession({ onInterviewComplete }: UseVoiceSessionOptions)
     interimUserRef.current = '';
     interimAiRef.current = '';
 
-    if (aiText.includes(INTERVIEW_COMPLETE_PHRASE)) {
+    if (isInterviewComplete(aiText)) {
       const finalTranscript = transcriptRef.current;
       void stopSession();
       onCompleteRef.current(finalTranscript);
