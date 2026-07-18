@@ -14,8 +14,10 @@ export function extractPrimaryPath(report: string): string | null {
 /** Extracts the numbered alternative career paths from the markdown report. */
 export function extractAlternativePaths(report: string): string[] {
   const alternatives: string[] = [];
+  // Stop only at the next markdown heading (a line starting with '#'), not
+  // any bare '#' — a recommended path can itself contain one, e.g. "C#".
   const sectionMatch = report.match(
-    /\*\*Alternative Paths for Consideration:\*\*\s*([\s\S]*?)(?=\n##|#|$)/,
+    /\*\*Alternative Paths for Consideration:\*\*\s*([\s\S]*?)(?=\n#|$)/,
   );
   if (!sectionMatch?.[1]) return alternatives;
 
