@@ -297,9 +297,13 @@ export function useVoiceSession({ onInterviewComplete }: UseVoiceSessionOptions)
       await startMicrophoneCapture();
     } catch (error) {
       console.error('Failed to start voice session:', error);
+      // A partial failure (e.g. mic permission denied) can leave an open
+      // AudioContext or live session behind; tear those down before
+      // surfacing the error so retrying doesn't leak resources.
+      await stopSession();
       setStatus(AppStatus.Error);
     }
-  }, [handleSessionMessage, playWelcomeMessage, startMicrophoneCapture]);
+  }, [handleSessionMessage, playWelcomeMessage, startMicrophoneCapture, stopSession]);
 
   /** Stops the session and clears the transcript for a fresh start. */
   const resetSession = useCallback(() => {
