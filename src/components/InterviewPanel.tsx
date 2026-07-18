@@ -57,9 +57,16 @@ export const InterviewPanel = ({
   return (
     <>
       <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
-        {transcript.map((entry, index) => (
-          <ChatBubble key={index} entry={entry} />
-        ))}
+        {/*
+          Only finalized turns are in the live region: interim transcripts
+          update token-by-token as speech streams in, and announcing every
+          partial word would make this unusable with a screen reader.
+        */}
+        <div role="log" aria-live="polite" aria-relevant="additions" className="space-y-4">
+          {transcript.map((entry, index) => (
+            <ChatBubble key={index} entry={entry} />
+          ))}
+        </div>
         {interimUserTranscript && (
           <ChatBubble entry={{ speaker: 'user', text: interimUserTranscript }} interim />
         )}
