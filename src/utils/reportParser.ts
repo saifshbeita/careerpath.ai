@@ -21,7 +21,10 @@ export function extractAlternativePaths(report: string): string[] {
   );
   if (!sectionMatch?.[1]) return alternatives;
 
-  for (const match of sectionMatch[1].matchAll(/^\s*\d\.\s*([^-]+)/gm)) {
+  // Split each numbered line on " - " (the title/rationale separator from
+  // the prompt spec), not on any hyphen — titles like "Full-Stack Developer"
+  // contain one themselves.
+  for (const match of sectionMatch[1].matchAll(/^\s*\d+\.\s*(.+?)(?=\s-\s|$)/gm)) {
     if (match[1]) alternatives.push(match[1].trim());
   }
   return alternatives;
