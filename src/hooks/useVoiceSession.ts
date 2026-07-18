@@ -96,11 +96,22 @@ export function useVoiceSession({ onInterviewComplete }: UseVoiceSessionOptions)
     processorRef.current?.disconnect();
     processorRef.current = null;
 
-    if (inputContextRef.current && inputContextRef.current.state !== 'closed') {
-      await inputContextRef.current.close();
+    // stopSession can be called via fire-and-forget (`void stopSession()`),
+    // so a rejected close() here — e.g. a concurrent stop/reset race —
+    // must not become an unhandled promise rejection.
+    try {
+      if (inputContextRef.current && inputContextRef.current.state !== 'closed') {
+        await inputContextRef.current.close();
+      }
+    } catch {
+      // Context already closing/closed.
     }
-    if (outputContextRef.current && outputContextRef.current.state !== 'closed') {
-      await outputContextRef.current.close();
+    try {
+      if (outputContextRef.current && outputContextRef.current.state !== 'closed') {
+        await outputContextRef.current.close();
+      }
+    } catch {
+      // Context already closing/closed.
     }
 
     stopPlayback();
