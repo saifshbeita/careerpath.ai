@@ -244,8 +244,15 @@ export function useVoiceSession({ onInterviewComplete }: UseVoiceSessionOptions)
     const ctx = inputContextRef.current;
     if (!ctx) return;
 
+    // Without these, playing the coach's voice through speakers (rather
+    // than headphones) gets picked back up by the mic and misread as the
+    // user interrupting, causing false barge-ins.
     mediaStreamRef.current = await navigator.mediaDevices.getUserMedia({
-      audio: true,
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+      },
     });
     const source = ctx.createMediaStreamSource(mediaStreamRef.current);
     processorRef.current = ctx.createScriptProcessor(
