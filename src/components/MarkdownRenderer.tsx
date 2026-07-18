@@ -2,13 +2,21 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+/** Escapes HTML metacharacters so raw model/user text can't inject markup. */
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 /**
- * Lightweight renderer for the trusted, model-generated report markdown.
+ * Lightweight renderer for the model-generated report markdown.
  * Supports the subset of markdown the analysis prompt asks for: headings,
  * bold, inline code, checklists, and ordered/unordered lists.
+ *
+ * The report can echo back text the user spoke during the interview, so
+ * HTML is escaped first — this is not merely trusted model output.
  */
 export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
-  const htmlContent = content
+  const htmlContent = escapeHtml(content)
     .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-slate-800 mb-6">$1</h1>')
     .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-semibold text-slate-700 mt-8 mb-4">$1</h2>')
     .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold text-slate-700 mt-6 mb-3">$1</h3>')
